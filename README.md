@@ -46,6 +46,16 @@ export CLIPSSH_HOST=user@myserver
 clipssh
 ```
 
+## Change Upload Directory
+
+Uploads land in `/tmp` by default. Override with `CLIPSSH_REMOTE_DIR`:
+
+```bash
+export CLIPSSH_REMOTE_DIR=~/.cache/clipssh   # must already exist on the remote
+```
+
+Files are written with `umask 077` so they're created as `0600` (owner-readable only) — important on shared hosts where `/tmp` is world-readable by default.
+
 ## Requirements
 
 **macOS:**
@@ -59,7 +69,7 @@ clipssh
 ## How It Works
 
 1. Extracts PNG image from your local clipboard
-2. Uploads to `/tmp/clipboard-<timestamp>.png` on remote host via SSH
+2. Uploads to `$CLIPSSH_REMOTE_DIR/clipboard-<timestamp>.png` (default `/tmp`) on remote host via SSH, with `umask 077` so the file is `0600`
 3. Copies the remote path to your clipboard
 4. You paste the path into Claude Code, OpenCode, or any tool, which reads and displays the image
 
